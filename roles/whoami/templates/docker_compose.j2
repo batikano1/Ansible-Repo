@@ -13,7 +13,7 @@ services:
       - "traefik.http.middlewares.ldap_auth.plugin.ldapAuth.attribute=uid"
       - "traefik.http.middlewares.ldap_auth.plugin.ldapAuth.bindDN=cn=admin,dc=ansible,dc=fr"
       - "traefik.http.middlewares.ldap_auth.plugin.ldapAuth.bindPassword=secret"
-      - "traefik.http.middlewares.ldap_auth.plugin.ldapAuth.baseDN=dc=ansible,dc=fr"
+      - "traefik.http.middlewares.ldap_auth.plugin.ldapAuth.baseDN= ou=People,dc=ansible,dc=fr"
       - "traefik.http.middlewares.ldap_auth.plugin.ldapAuth.serverList[0].url=ldap://ldap"
       - "traefik.http.middlewares.ldap_auth.plugin.ldapAuth.searchScope=2"
       - "traefik.http.middlewares.ldap_auth.plugin.ldapAuth.serverList[0].port=1389"
