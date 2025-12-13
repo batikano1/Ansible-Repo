@@ -1,0 +1,15 @@
+
+- name: Infrastructure
+  hosts: test
+  roles:
+    - name: docker
+    - name: openldap
+    - name: Traefik
+
+- name: Install applications
+  hosts: whoami
+  roles:
+    - name: whoami
+
+
+

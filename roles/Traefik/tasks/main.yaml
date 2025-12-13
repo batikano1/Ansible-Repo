@@ -1,0 +1,16 @@
+- name: Adding variables
+  ansible.builtin.include_vars:
+    file: main.yml
+    name: Docker_Variables
+
+- name: Jinja Template
+  ansible.builtin.template:
+      src: docker_compose.j2
+      dest: /tmp/ansible/compose_traefik.yml
+      remote_src: true
+g
+- name: Traefik Container deployment
+  community.docker.docker_compose_v2:
+   project_src: /tmp
+   files: /tmp/ansible/compose_traefik.yml
+   remove_orphans: true

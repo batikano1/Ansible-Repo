@@ -1,0 +1,9 @@
+test:
+  hosts:
+    localhost:
+      ansible_connection: local
+
+whoami:
+  hosts:
+    localhost:
+      ansible_connection: local

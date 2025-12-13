@@ -1,0 +1,26 @@
+services:
+    ldap:
+        container_name: ldap
+        image: bitnamilegacy/openldap
+        user: root
+        ports:
+        - "1389:1389"
+        environment:
+              - LDAP_HOME={{ openldap_home }}
+              - LDAP_ADMIN_USERNAME={{ openldap_admin_username }}
+              - LDAP_ADMIN_PASSWORD={{ openldap_admin_password }}
+              - LDAP_ROOT={{ openldap_root }}
+              - LDAP_CUSTOM_LDIF_DIR=/base
+        restart: unless-stopped
+        volumes:
+              - "{{ openldap_home }}:/bitnami/openldap"
+              - "{{ openldap_dir }}:/base"
+        networks:
+            - private
+        labels:
+            traefik.enable: false
+
+networks:
+  private:
+    external: true
+

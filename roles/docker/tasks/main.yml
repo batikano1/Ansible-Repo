@@ -1,0 +1,10 @@
+
+- name: install Docker
+  ansible.builtin.package:
+    name: docker-compose
+    state: present
+
+- name: Create traefik network
+  community.docker.docker_network:
+    name: private
+    state: present

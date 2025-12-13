@@ -1,0 +1,2 @@
+pyYAML
+docker-compose==2.18.0

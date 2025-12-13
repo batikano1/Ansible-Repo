@@ -1,0 +1,63 @@
+- name: Adding variables
+  ansible.builtin.include_vars:
+    file: main.yml
+    name: Docker_Variables
+
+- name: Creates directory
+  ansible.builtin.file:
+    path: /tmp/ansible
+    state: directory
+
+
+
+- name: Jinja Template
+  ansible.builtin.template:
+      src: docker_compose.j2
+      dest: /tmp/ansible/compose.yml
+      remote_src: true
+
+- name: Ldap Container Deployement
+  community.docker.docker_compose_v2:
+   project_src: /tmp/ansible
+
+
+- name: Creates directory
+  ansible.builtin.file:
+    path: /tmp/ansible/csvfiles
+    state: directory
+
+
+- name: Copy Organisation Files
+  ansible.builtin.copy:
+    src: org.ldif
+    dest: /tmp/ansible/org.ldif
+
+- name: Copy Groupe Files
+  ansible.builtin.copy:
+    src: csvfiles/grp.csv
+    dest: /tmp/ansible/csvfiles/grp.csv
+
+
+- name: Copy User Files
+  ansible.builtin.copy:
+    src: csvfiles/usr.csv
+    dest: /tmp/ansible/csvfiles/usr.csv
+
+- name: Copy Script
+  ansible.builtin.copy:
+    src: converter.py
+    dest: /tmp/ansible/converter.py
+    mode: "u=rwx,o=rx,g=rx"
+
+- name: Generate LDIF files
+  ansible.builtin.command:
+    chdir: /tmp/ansible
+    cmd: python3 /tmp/ansible/converter.py
+    creates: "output.ldif"
+
+
+- name: Wait for LDAP to be ready
+  ansible.builtin.pause:
+    seconds: 3
+
+

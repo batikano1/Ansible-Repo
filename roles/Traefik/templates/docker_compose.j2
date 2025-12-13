@@ -1,0 +1,30 @@
+services:
+  traefik:
+    image: "traefik:v3.4"
+    container_name: "traefik"
+    restart: unless-stopped
+    security_opt:
+      - no-new-privileges:true
+    networks:
+      - public
+      - private
+    command:
+      - "--providers.docker=true"
+      - "--providers.docker.exposedbydefault=false"
+      - "--providers.docker.network=public"
+      - "--providers.docker.network=private"
+      - "--entryPoints.web.address=:{{ WEBPORT }}"
+      - "--experimental.plugins.ldapAuth.modulename=github.com/wiltonsr/ldapAuth"
+      - "--experimental.plugins.ldapAuth.version=v0.1.11"
+
+    ports:
+      - "{{ WEBPORT }}:{{ WEBPORT }}"
+      - "{{ MANAGEMENTPORT }}:{{ MANAGEMENTPORT }}"
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock:ro"
+
+networks:
+  public:
+    driver: bridge
+  private:
+    external: true

@@ -1,0 +1,79 @@
+services:
+  whoami:
+    image: traefik/whoami
+    restart: unless-stopped
+    container_name: whoami
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.whoami.rule=Host(`whoami.localhost`)"
+      - "traefik.http.routers.whoami.entrypoints=web"
+      - "traefik.http.services.whoami.loadbalancer.server.port=80"
+      - "traefik.http.routers.whoami.middlewares=ldap_auth"
+      - "traefik.http.middlewares.ldap_auth.plugin.ldapAuth.enabled=true"
+      - "traefik.http.middlewares.ldap_auth.plugin.ldapAuth.attribute=uid"
+      - "traefik.http.middlewares.ldap_auth.plugin.ldapAuth.bindDN=cn=admin,dc=ansible,dc=fr"
+      - "traefik.http.middlewares.ldap_auth.plugin.ldapAuth.bindPassword=secret"
+      - "traefik.http.middlewares.ldap_auth.plugin.ldapAuth.baseDN=dc=ansible,dc=fr"
+      - "traefik.http.middlewares.ldap_auth.plugin.ldapAuth.serverList[0].url=ldap://localhost"
+      - "traefik.http.middlewares.ldap_auth.plugin.ldapAuth.searchScope=2"
+      - "traefik.http.middlewares.ldap_auth.plugin.ldapAuth.serverList[0].port=1389"
+    networks:
+      - public
+
+  apache:
+    image: httpd:latest
+    container_name: apache
+    restart: unless-stopped
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.apache.rule=Host(`mon-site.localhost`) && PathPrefix(`/front`)"
+      - "traefik.http.routers.apache.entrypoints=web"
+      - "traefik.http.routers.apache.middlewares=apache-stripprefix"
+      - "traefik.http.middlewares.apache-stripprefix.stripprefix.prefixes=/front"
+      - "traefik.http.services.apache.loadbalancer.server.port=80"
+      - "traefik.http.routers.whoami.middlewares=ldap_auth"
+      - "traefik.http.middlewares.ldap_auth.plugin.ldapAuth.enabled=true"
+      - "traefik.http.middlewares.ldap_auth.plugin.ldapAuth.attribute=uid"
+      - "traefik.http.middlewares.ldap_auth.plugin.ldapAuth.bindDN=cn=admin,dc=ansible,dc=fr"
+      - "traefik.http.middlewares.ldap_auth.plugin.ldapAuth.bindPassword=secret"
+      - "traefik.http.middlewares.ldap_auth.plugin.ldapAuth.baseDN=dc=ansible,dc=fr"
+      - "traefik.http.middlewares.ldap_auth.plugin.ldapAuth.serverList[0].url=ldap://localhost"
+      - "traefik.http.middlewares.ldap_auth.plugin.ldapAuth.searchScope=2"
+      - "traefik.http.middlewares.ldap_auth.plugin.ldapAuth.serverList[0].port=1389"
+    networks:
+      - private
+
+  nginx:
+    image: nginx:latest
+    container_name: nginx
+    restart: unless-stopped
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.nginx.rule=Host(`mon-site.localhost`) && PathPrefix(`/api`)"
+      - "traefik.http.routers.nginx.entrypoints=web"
+      - "traefik.http.routers.nginx.middlewares=nginx-stripprefix"
+      - "traefik.http.middlewares.nginx-stripprefix.stripprefix.prefixes=/api"
+      - "traefik.http.services.nginx.loadbalancer.server.port=80"
+      - "traefik.http.routers.whoami.middlewares=ldap_auth"
+      - "traefik.http.middlewares.ldap_auth.plugin.ldapAuth.enabled=true"
+      - "traefik.http.middlewares.ldap_auth.plugin.ldapAuth.attribute=uid"
+      - "traefik.http.middlewares.ldap_auth.plugin.ldapAuth.bindDN=cn=admin,dc=ansible,dc=fr"
+      - "traefik.http.middlewares.ldap_auth.plugin.ldapAuth.bindPassword=secret"
+      - "traefik.http.middlewares.ldap_auth.plugin.ldapAuth.baseDN=dc=ansible,dc=fr"
+      - "traefik.http.middlewares.ldap_auth.plugin.ldapAuth.serverList[0].url=ldap://localhost"
+      - "traefik.http.middlewares.ldap_auth.plugin.ldapAuth.searchScope=2"
+      - "traefik.http.middlewares.ldap_auth.plugin.ldapAuth.serverList[0].port=1389"
+    networks:
+      - private
+
+
+
+networks:
+  public:
+    driver: bridge
+    name: public-network
+  private:
+    driver: bridge
+    name: private-network
+
+

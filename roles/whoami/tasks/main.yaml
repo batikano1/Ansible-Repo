@@ -1,0 +1,10 @@
+- name: Jinja Template
+  ansible.builtin.template:
+      src: docker_compose.j2
+      dest: /tmp/ansible/compose_whoami.yml
+      remote_src: true
+
+- name: Whoami Containers deployment
+  community.docker.docker_compose_v2:
+   project_src: /tmp
+   files: /tmp/ansible/compose_whoami.yml
