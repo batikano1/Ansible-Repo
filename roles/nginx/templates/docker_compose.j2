@@ -1,13 +1,15 @@
 services:
-  whoami:
-    image: traefik/whoami
+  nginx:
+    image: nginx:latest
+    container_name: nginx
     restart: unless-stopped
-    container_name: whoami
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.whoami.rule=Host(`whoami.localhost`)"
-      - "traefik.http.routers.whoami.entrypoints=web"
-      - "traefik.http.services.whoami.loadbalancer.server.port=80"
+      - "traefik.http.routers.nginx.rule=Host(`mon-site.localhost`) && PathPrefix(`/api`)"
+      - "traefik.http.routers.nginx.entrypoints=web"
+      - "traefik.http.routers.nginx.middlewares=nginx-stripprefix"
+      - "traefik.http.middlewares.nginx-stripprefix.stripprefix.prefixes=/api"
+      - "traefik.http.services.nginx.loadbalancer.server.port=80"
       - "traefik.http.routers.whoami.middlewares=ldap_auth"
       - "traefik.http.middlewares.ldap_auth.plugin.ldapAuth.enabled=true"
       - "traefik.http.middlewares.ldap_auth.plugin.ldapAuth.attribute=uid"
@@ -20,8 +22,9 @@ services:
     networks:
       - private
 
+
+
 networks:
   private:
     external: true
-
 

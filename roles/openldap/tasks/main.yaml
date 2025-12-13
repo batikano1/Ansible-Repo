@@ -8,8 +8,6 @@
     path: /tmp/ansible
     state: directory
 
-
-
 - name: Jinja Template
   ansible.builtin.template:
       src: docker_compose.j2

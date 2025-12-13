@@ -8,7 +8,7 @@
       src: docker_compose.j2
       dest: /tmp/ansible/compose_traefik.yml
       remote_src: true
-g
+
 - name: Traefik Container deployment
   community.docker.docker_compose_v2:
    project_src: /tmp

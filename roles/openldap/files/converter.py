@@ -8,7 +8,7 @@ outputfile = "output.ldif"
 existingGroupe =[]
 existingUsers = []
 default_gids_start = 1000
-default_uids_start = 5000
+default_uids_start = 1000
 
 def getgroupentity(Row):
     global default_gids_start

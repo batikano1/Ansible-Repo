@@ -12,4 +12,14 @@
     - name: whoami
 
 
+- name: Install applications
+  hosts: whoami
+  roles:
+    - name: nginx
+
+- name: Install applications
+  hosts: whoami
+  roles:
+    - name: apache
+
 

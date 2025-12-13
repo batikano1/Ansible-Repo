@@ -7,3 +7,14 @@ whoami:
   hosts:
     localhost:
       ansible_connection: local
+
+nginx:
+  hosts:
+    localhost:
+      ansible_connection: local
+
+apache:
+  hosts:
+    localhost:
+      ansible_connection: local
+
