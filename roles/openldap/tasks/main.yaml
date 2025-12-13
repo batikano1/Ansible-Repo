@@ -14,9 +14,6 @@
       dest: /tmp/ansible/compose.yml
       remote_src: true
 
-- name: Ldap Container Deployement
-  community.docker.docker_compose_v2:
-   project_src: /tmp/ansible
 
 
 - name: Creates directory
@@ -53,9 +50,7 @@
     cmd: python3 /tmp/ansible/converter.py
     creates: "output.ldif"
 
-
-- name: Wait for LDAP to be ready
-  ansible.builtin.pause:
-    seconds: 3
-
+- name: Ldap Container Deployement
+  community.docker.docker_compose_v2:
+   project_src: /tmp/ansible
 
