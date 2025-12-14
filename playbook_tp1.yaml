@@ -7,19 +7,10 @@
     - name: Traefik
 
 - name: Install applications
-  hosts: whoami
+  hosts: groupe1,groupe2,groupe3
   roles:
     - name: whoami
 
 
-- name: Install applications
-  hosts: whoami
-  roles:
-    - name: nginx
-
-- name: Install applications
-  hosts: whoami
-  roles:
-    - name: apache
 
 

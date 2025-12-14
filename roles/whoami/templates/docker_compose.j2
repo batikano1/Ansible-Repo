@@ -20,6 +20,35 @@ services:
     networks:
       - private
 
+  nginx:
+    image: nginx:latest
+    container_name: nginx
+    restart: unless-stopped
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.nginx.rule=Host(`mon-site.localhost`) && PathPrefix(`/api`)"
+      - "traefik.http.routers.nginx.entrypoints=web"
+      - "traefik.http.routers.nginx.middlewares=nginx-stripprefix"
+      - "traefik.http.middlewares.nginx-stripprefix.stripprefix.prefixes=/api"
+      - "traefik.http.services.nginx.loadbalancer.server.port=80"
+    networks:
+      - private
+
+
+  apache:
+    image: httpd:latest
+    container_name: apache
+    restart: unless-stopped
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.apache.rule=Host(`mon-site.localhost`) && PathPrefix(`/front`)"
+      - "traefik.http.routers.apache.entrypoints=web"
+      - "traefik.http.routers.apache.middlewares=apache-stripprefix"
+      - "traefik.http.middlewares.apache-stripprefix.stripprefix.prefixes=/front"
+      - "traefik.http.services.apache.loadbalancer.server.port=80"
+    networks:
+      - private
+
 networks:
   private:
     external: true

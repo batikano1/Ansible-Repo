@@ -3,18 +3,17 @@ test:
     localhost:
       ansible_connection: local
 
-whoami:
+groupe1:
   hosts:
     localhost:
       ansible_connection: local
 
-nginx:
+groupe2:
   hosts:
     localhost:
       ansible_connection: local
 
-apache:
+groupe3:
   hosts:
     localhost:
       ansible_connection: local
-
