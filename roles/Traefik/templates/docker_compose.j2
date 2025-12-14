@@ -15,12 +15,15 @@ services:
       - "--entryPoints.web.address=:{{ WEBPORT }}"
       - "--experimental.plugins.ldapAuth.modulename=github.com/wiltonsr/ldapAuth"
       - "--experimental.plugins.ldapAuth.version=v0.1.11"
+      - "--experimental.localPlugins.token_verification.modulename=github.com/batikano1/token_verification"
+
 
     ports:
       - "{{ WEBPORT }}:{{ WEBPORT }}"
       - "{{ MANAGEMENTPORT }}:{{ MANAGEMENTPORT }}"
     volumes:
       - "/var/run/docker.sock:/var/run/docker.sock:ro"
+      - "/tmp/ansible/plugins-local:/plugins-local"
 
 networks:
   public:

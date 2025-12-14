@@ -43,7 +43,7 @@ services:
       - "traefik.enable=true"
       - "traefik.http.routers.apache.rule=Host(`mon-site.localhost`) && PathPrefix(`/front`)"
       - "traefik.http.routers.apache.entrypoints=web"
-      - "traefik.http.routers.apache.middlewares=apache-stripprefix"
+      - "traefik.http.routers.apache.middlewares=apache-stripprefix,token_verification"
       - "traefik.http.middlewares.apache-stripprefix.stripprefix.prefixes=/front"
       - "traefik.http.services.apache.loadbalancer.server.port=80"
     networks:

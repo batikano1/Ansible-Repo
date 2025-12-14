@@ -9,6 +9,19 @@
       dest: /tmp/ansible/compose_traefik.yml
       remote_src: true
 
+
+- name: Create plugins directory structure
+  file:
+    path: /tmp/ansible/plugins-local/src/github.com/batikano1/token_verification/
+    state: directory
+    mode: '0755'
+
+- name: Copy token_verification plugin files
+  copy:
+    src: token_verification/
+    dest: /tmp/ansible/plugins-local/src/github.com/batikano1/token_verification/
+    mode: '0755'
+
 - name: Traefik Container deployment
   community.docker.docker_compose_v2:
    project_src: /tmp
